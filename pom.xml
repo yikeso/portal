@@ -17,6 +17,7 @@
     <version>1.0.0</version>
     <modules>
         <module>po</module>
+        <module>portalbackstage</module>
     </modules>
 
     <properties>

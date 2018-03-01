@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:fragment="headTag">
+    <meta charset="UTF-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="../../static/css/base.css" type="text/css"
+          th:href="@{~/css/base.css}" />
+    <link rel="stylesheet" href="../../static/css/page.css" type="text/css"
+          th:href="@{~/css/page.css}" />
+    <!--[if lte IE 8]-->
+    <link href="../../static/css/ie8.css" rel="stylesheet" type="text/css"
+         th:href="@{~/css/ie8.css}"/>
+    <title th:text="${title}">Title</title>
+</head>
+<body>
+<div class="superWrap clearfix" style="height: 781px;">
+    <!-- leftBar -->
+    <div class="super-side-menu" th:fragment="leftBar">
+        <div class="super-side-menu">
+            <div class="logo"><a href="public_super_cg.html" target="_parent"><img src="images/logo.png"/></a></div>
+
+            <div class="side-menu">
+                <ul>
+                    <li class=""><a href="wenzhang_xinwen.html" target="Mainindex"><i class="ico-1"></i>文章发布</a></li>
+                    <li><a href="huodong_guanli.html" target="Mainindex"><i class="ico-2"></i>活动管理</a></li>
+                    <li class="on"><a href="xiangce_Guanli.html" target="Mainindex"><i class="ico-3"></i>相册管理</a></li>
+                    <li><a href="tupian_pc_index.html" target="Mainindex"><i class="ico-4"></i>图片管理</a></li>
+                    <li><a href="zixun_Team.html" target="Mainindex"><i class="ico-5"></i>咨询管理</a></li>
+                    <li><a href="muban_Guanli.html" target="Mainindex"><i class="ico-6"></i>模板管理</a></li>
+                    <li><a href="xitong_set.html" target="Mainindex"><i class="ico-7"></i>系统设置</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="superContent">
+        <!--header-->
+        <div class="super-header super-header2" th:fragment="head">
+            <div class="super-header clearfix">
+                <h2>网站后台管理系统</h2>
+                <div class="head-right">
+                    <i class="ico-user"></i>当前用户：
+                    <div class="userslideDown">
+                        <a href="javascript:;" class="superUser">Admin<i class="ico-tri"></i></a>
+                        <div class="slidedownBox">
+                            <ul>
+                                <li><a href="change_psw.html" target="Mainindex">修改密码</a></li>
+                                <li><a href="loginb.html" target="_parent">退出</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div  th:fragment="foot">
+    <script type="text/javascript" src="../../static/js/jquery.min.js" th:src="@{~/js/jquery.min.js}"></script>
+    <script type="text/javascript" src="js/main.js" th:src="@{~/js/main.js}"></script>
+    <script type="text/javascript" src="../../static/js/modernizr.js" th:src="@{~/js/modernizr.js}"></script>
+    <!--[if IE]>
+    <script src="http://libs.useso.com/js/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+    <script>
+        window.onresize = function(){
+	        var winH=$(window).height();
+	        var headH=$('.super-header').height();
+	        $('.superWrap').height(winH);
+	        $('.superCtabBot').height(winH-headH);
+        };
+        $(window).resize();
+    </script>
+    <script type="text/javascript">
+	    $(function(){
+		    $('.side-menu li').click(function(){
+			    $(this).addClass('on').siblings().removeClass('on');
+		    })
+	    })
+</script>
+</div>
+</body>
+</html>
