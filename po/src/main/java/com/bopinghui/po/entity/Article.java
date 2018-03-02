@@ -26,7 +26,7 @@ public class Article {
     /**
      * 封面
      */
-    String cover;
+    List<String> cover;
     /**
      * 作者
      */
@@ -80,11 +80,11 @@ public class Article {
         this.title = title;
     }
 
-    public String getCover() {
+    public List<String> getCover() {
         return cover;
     }
 
-    public void setCover(String cover) {
+    public void setCover(List<String> cover) {
         this.cover = cover;
     }
 
