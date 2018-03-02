@@ -1,10 +1,7 @@
 package com.bopinghui.portalbackstage.common.utils;
 
-import org.apache.logging.log4j.core.util.UuidUtil;
-
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
-import java.util.concurrent.TimeUnit;
 
 /**
  * id生成工具类

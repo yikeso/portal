@@ -1,6 +1,5 @@
 package com.bopinghui.portalbackstage.config;
 
-import com.bopinghui.po.entity.Article;
 import com.bopinghui.po.entity.ArticleDetail;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
@@ -15,6 +14,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,40 +61,17 @@ public class MongodbConfig {
     }
 
     /**
-     * 获取portal库
+     * 获取mongoTemplate
      * @param mongoClient
      * @return
      */
     @Bean
     @Autowired
-    public MongoDatabase portalDb(@Qualifier("mongoClient") MongoClient mongoClient){
-        return mongoClient.getDatabase(mongodbPropertiesBean.getDb());
-    }
-
-    /**
-     * 获取数据库中的article集合
-     * @param database
-     * @return
-     */
-    @Bean
-    @Autowired
-    public MongoCollection articleCollection(@Qualifier("portalDb") MongoDatabase database){
-        MongoCollection<Article> collection = database.getCollection(
-                mongodbPropertiesBean.getArticleCollectionName(), Article.class);
-        return collection;
-    }
-
-    /**
-     * 获取数据库中的articleDetail集合
-     * @param database
-     * @return
-     */
-    @Bean
-    @Autowired
-    public MongoCollection articleDetailCollection(@Qualifier("portalDb") MongoDatabase database){
-        MongoCollection<ArticleDetail> collection = database.getCollection(
-                mongodbPropertiesBean.getArticleDetailCollectionName(), ArticleDetail.class);
-        return collection;
+    public MongoTemplate mongoTemplate(@Qualifier("mongoClient") MongoClient mongoClient){
+        SimpleMongoDbFactory simpleMongoDbFactory = new SimpleMongoDbFactory(mongoClient,
+                mongodbPropertiesBean.getDb());
+        MongoTemplate mongoTemplate = new MongoTemplate(simpleMongoDbFactory);
+        return mongoTemplate;
     }
 
 }

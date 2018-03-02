@@ -1,5 +1,6 @@
 package com.bopinghui.portalbackstage.controllers;
 
+import com.bopinghui.po.constants.ColumnConstant;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ public class RootController {
     @RequestMapping("/")
     public String index(Model model){
         model.addAttribute("title","网站后台管理系统");
+        model.addAttribute("columnList", ColumnConstant.values());
         return "index";
     }
 }

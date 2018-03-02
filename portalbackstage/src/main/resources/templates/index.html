@@ -9,18 +9,14 @@
 	<title>网站后台管理系统</title>
 	<link rel="stylesheet" href="css/base.css" />
 	<link rel="stylesheet" href="css/page.css" />
-	<!--[if lte IE 8]>
+	<!--[if lte IE 8]-->
 	<link href="css/ie8.css" rel="stylesheet" type="text/css"/>
-	<![endif]-->
-	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/modernizr.js"></script>
-	<!--[if IE]>
-	<script src="http://libs.useso.com/js/html5shiv/3.7/html5shiv.min.js"></script>
-	<![endif]-->
 </head>
 
 <body>
 <div class="superWrap clearfix" style="height: 781px;">
+	<!--content E-->
+	<div class="layuiBg" id="commonMask"></div><!--公共遮罩-->
 	<!--side S-->
 	<div class="super-side-menu" th:include="fragments/fragment :: leftBar">
 	</div>
@@ -28,7 +24,7 @@
 		<div class="super-header super-header2" th:include="fragments/fragment :: head" >
 		</div>
 		<!--main-->
-		<div class="superCtab superCtabBot" style="height: 695px;">
+		<div class="superCtab superCtabBot" style="height: 695px;"  id="Mainindex"  >
 		</div>
 		
 	</div>

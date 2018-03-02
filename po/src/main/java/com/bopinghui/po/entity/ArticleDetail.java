@@ -1,5 +1,7 @@
 package com.bopinghui.po.entity;
 
+import org.springframework.data.annotation.Id;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -14,6 +16,7 @@ public class ArticleDetail {
     /**
      * id
      */
+    @Id
     String id;
     /**
      * 文章标题
