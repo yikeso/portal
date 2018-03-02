@@ -1,6 +1,7 @@
 package com.bopinghui.portalbackstage.common.utils;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -18,7 +19,7 @@ public class IdUtil {
      * @return
      */
     public static String createId(){
-        String dateStr = dtf.format(Instant.now());
+        String dateStr = dtf.format(LocalDateTime.now());
         return dateStr + com.bopinghui.portalbackstage.common.utils.UuidUtil.randomUuid();
     }
 }

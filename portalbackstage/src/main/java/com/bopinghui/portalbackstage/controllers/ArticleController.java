@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -52,6 +53,13 @@ public class ArticleController {
         PageResult<Article> pageResult = articleService.pageFindByColumnId(columnId,pageNo,pageSize);
         model.addAttribute("pageResult",pageResult);
         return "articlepublish/articleList::articleList";
+    }
+
+    @GetMapping("/{columnId}/new")
+    public String newArticle(@PathVariable("columnId") Integer columnId, Model model){
+        model.addAttribute("title","新增文章");
+        model.addAttribute("columnId",columnId);
+        return "articlepublish/wenzhang_xinwen_fabu";
     }
 
 }

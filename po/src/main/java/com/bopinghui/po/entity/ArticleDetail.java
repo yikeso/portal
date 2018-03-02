@@ -23,13 +23,17 @@ public class ArticleDetail {
      */
     String title;
     /**
+     * 商品详情连接
+     */
+    String detailsLink;
+    /**
      * 文章摘要
      */
     String bstract;
     /**
      * 关键词
      */
-    List<String> keywords;
+    String keywords;
     /**
      * 文章内容
      */
@@ -59,6 +63,14 @@ public class ArticleDetail {
         this.title = title;
     }
 
+    public String getDetailsLink() {
+        return detailsLink;
+    }
+
+    public void setDetailsLink(String detailsLink) {
+        this.detailsLink = detailsLink;
+    }
+
     public String getBstract() {
         return bstract;
     }
@@ -67,11 +79,11 @@ public class ArticleDetail {
         this.bstract = bstract;
     }
 
-    public List<String> getKeywords() {
+    public String getKeywords() {
         return keywords;
     }
 
-    public void setKeywords(List<String> keywords) {
+    public void setKeywords(String keywords) {
         this.keywords = keywords;
     }
 
@@ -118,8 +130,9 @@ public class ArticleDetail {
         return "ArticleDetail{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
+                ", detailsLink='" + detailsLink + '\'' +
                 ", bstract='" + bstract + '\'' +
-                ", keywords=" + keywords +
+                ", keywords='" + keywords + '\'' +
                 ", content='" + content + '\'' +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +

@@ -24,13 +24,17 @@ public class Article {
      */
     String title;
     /**
+     * 封面
+     */
+    String cover;
+    /**
      * 作者
      */
     String author;
     /**
      * 关键词
      */
-    List<String> keywords;
+    String keywords;
     /**
      * 栏目id
      */
@@ -76,6 +80,14 @@ public class Article {
         this.title = title;
     }
 
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
     public String getAuthor() {
         return author;
     }
@@ -84,11 +96,11 @@ public class Article {
         this.author = author;
     }
 
-    public List<String> getKeywords() {
+    public String getKeywords() {
         return keywords;
     }
 
-    public void setKeywords(List<String> keywords) {
+    public void setKeywords(String keywords) {
         this.keywords = keywords;
     }
 
@@ -175,8 +187,9 @@ public class Article {
         return "Article{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
+                ", cover='" + cover + '\'' +
                 ", author='" + author + '\'' +
-                ", keywords=" + keywords +
+                ", keywords='" + keywords + '\'' +
                 ", columnId=" + columnId +
                 ", columnName='" + columnName + '\'' +
                 ", delete=" + delete +

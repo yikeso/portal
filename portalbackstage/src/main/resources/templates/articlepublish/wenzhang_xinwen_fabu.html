@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html class=" js csstransforms3d"   lang="zh-cmn-Hans" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+	<meta charset="utf-8" />
+	<meta name="renderer" content="webkit" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title th:text="${title}">文章发布-发布</title>
+    <link href="../../static/js/utf8-jsp/themes/default/css/umeditor.css" th:href="@{~/js/utf8-jsp/themes/default/css/umeditor.css}" type="text/css" rel="stylesheet" />
+	<link rel="stylesheet" href="../../staticl/css/base.css" th:href="@{~/css/base.css}" />
+	<link rel="stylesheet" href="../../static/css/page.css" th:href="@{~/css/page.css}" />
+    <link rel="stylesheet" type="text/css" href="../../static/js/webuploader/webuploader.css"  th:href="@{~/js/webuploader/webuploader.css}"/>
+    <!--[if lte IE 8]>
+    <link href="../../static/css/ie8.css" rel="stylesheet" type="text/css" th:href="@{~/css/ie8.css}"/>
+    <![endif]-->
+    <script type="text/javascript" src="../../static/js/jquery.min.js" th:src="@{~/js/jquery.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/main.js" th:src="@{~/js/main.js}"></script>
+    <script type="text/javascript" src="../../static/js/modernizr.js" th:src="@{~/js/modernizr.js}"></script>
+    <script type="text/javascript" src="../../static/js/jquery.selectui.js" th:src="@{~/js/jquery.selectui.js}"></script>
+	<script>
+	$(function($) {
+		$("select").selectui({
+			// 是否自动计算宽度
+			autoWidth: true,
+			// 是否启用定时器刷新文本和宽度
+			interval: true
+		});
+	});
+	</script>
+	<!--[if IE]>
+	<script src="http://libs.useso.com/js/html5shiv/3.7/html5shiv.min.js"></script>
+	<![endif]-->
+</head>
+<body style="background: rgb(246, 245, 250);">
+	<!--content S-->
+	<div class="super-content">
+		
+		<div class="superCtab">
+			<div class="publishArt">
+				<h4>发布文章</h4>
+				<div class="pubMain">
+					<form action="" method="post">
+                    <input type="hidden" name="columnId" th:value="${columnId}" />
+                        <h5 class="pubtitle">文章标题</h5>
+                        <div class="pub-txt-bar">
+                            <input type="text" name="title" class="shuruTxt" />
+						</div>
+						<h5 class="pubtitle">文章关键字</h5>
+						<div class="pub-txt-bar">
+							<input type="text" name="keywords" class="shuruTxt" />
+						</div>
+						<h5 class="pubtitle">封面</h5>
+                        <div id="uploader-demo">
+                            <!--用来存放item-->
+                            <div id="fileList" class="uploader-list"></div>
+                            <div id="filePicker">选择图片</div>
+                        </div>
+						<h5 class="pubtitle">详情连接</h5>
+						<div class="pub-txt-bar">
+							<input type="text" class="shuruTxt" name="detailsLink" placeholder="http://" />
+						</div>
+						<h5 class="pubtitle">文章简介</h5>
+						<div class="pub-area-bar">
+							<textarea rows="" name="bstract" cols="3"></textarea>
+						</div>
+							<h5 class="pubtitle">文章内容</h5>
+                        <!-- 加载编辑器的容器 -->
+                        <script id="container" name="content" type="text/plain">
+                        </script>
+						<div class="pub-btn">
+							<input type="button" id="" value="保存" class="saveBtn" />
+						</div>
+					</form>
+				</div>
+			</div>
+		
+		</div>
+    </div>
+	<!--content E-->
+	<!--点击修改弹出层-->
+	<div class="layuiBg"></div><!--公共遮罩-->
+<script type="text/javascript">
+// 添加全局站点信息
+var BASE_URL = '/webuploader';
+</script>
+<!--引入JS-->
+<script type="text/javascript" src="../../static/js/webuploader/webuploader.js" th:src="@{~/js/webuploader/webuploader.js}"></script>
+<!--<script type="text/javascript" src="../../static/js/webuploader/demo.js" th:src="@{~/js/webuploader/demo.js}"></script>-->
+    <!-- 配置文件 -->
+    <script type="text/javascript" src="../../static/js/utf8-jsp/umeditor.config.js" th:src="@{~/js/utf8-jsp/umeditor.config.js}"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="../../static/js/utf8-jsp/umeditor.min.js" th:src="@{~/js/utf8-jsp/umeditor.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/utf8-jsp/lang/zh-cn/zh-cn.js" th:src="@{~/js/utf8-jsp/lang/zh-cn/zh-cn.js}"></script>
+    <script type="text/javascript">
+
+    //实例化编辑器
+    //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+   var ue = UM.getEditor('container');
+    function isFocus(e){
+        alert(UE.getEditor('editor').isFocus());
+        UE.dom.domUtils.preventDefault(e)
+    }
+    function setblur(e){
+        UE.getEditor('editor').blur();
+        UE.dom.domUtils.preventDefault(e)
+    }
+    function insertHtml() {
+        var value = prompt('插入html代码', '');
+        UE.getEditor('editor').execCommand('insertHtml', value)
+    }
+    function createEditor() {
+        enableBtn();
+        UE.getEditor('editor');
+    }
+    function getAllHtml() {
+        alert(UE.getEditor('editor').getAllHtml())
+    }
+    function getContent() {
+        var arr = [];
+        arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+        arr.push("内容为：");
+        arr.push(UE.getEditor('editor').getContent());
+        alert(arr.join("\n"));
+    }
+    function getPlainTxt() {
+        var arr = [];
+        arr.push("使用editor.getPlainTxt()方法可以获得编辑器的带格式的纯文本内容");
+        arr.push("内容为：");
+        arr.push(UE.getEditor('editor').getPlainTxt());
+        alert(arr.join('\n'))
+    }
+    function setContent(isAppendTo) {
+        var arr = [];
+        arr.push("使用editor.setContent('欢迎使用ueditor')方法可以设置编辑器的内容");
+        UE.getEditor('editor').setContent('欢迎使用ueditor', isAppendTo);
+        alert(arr.join("\n"));
+    }
+    function setDisabled() {
+        UE.getEditor('editor').setDisabled('fullscreen');
+        disableBtn("enable");
+    }
+
+    function setEnabled() {
+        UE.getEditor('editor').setEnabled();
+        enableBtn();
+    }
+
+    function getText() {
+        //当你点击按钮时编辑区域已经失去了焦点，如果直接用getText将不会得到内容，所以要在选回来，然后取得内容
+        var range = UE.getEditor('editor').selection.getRange();
+        range.select();
+        var txt = UE.getEditor('editor').selection.getText();
+        alert(txt)
+    }
+
+    function getContentTxt() {
+        var arr = [];
+        arr.push("使用editor.getContentTxt()方法可以获得编辑器的纯文本内容");
+        arr.push("编辑器的纯文本内容为：");
+        arr.push(UE.getEditor('editor').getContentTxt());
+        alert(arr.join("\n"));
+    }
+    function hasContent() {
+        var arr = [];
+        arr.push("使用editor.hasContents()方法判断编辑器里是否有内容");
+        arr.push("判断结果为：");
+        arr.push(UE.getEditor('editor').hasContents());
+        alert(arr.join("\n"));
+    }
+    function setFocus() {
+        UE.getEditor('editor').focus();
+    }
+    function deleteEditor() {
+        disableBtn();
+        UE.getEditor('editor').destroy();
+    }
+    function disableBtn(str) {
+        var div = document.getElementById('btns');
+        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
+        for (var i = 0, btn; btn = btns[i++];) {
+            if (btn.id == str) {
+                UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
+            } else {
+                btn.setAttribute("disabled", "true");
+            }
+        }
+    }
+    function enableBtn() {
+        var div = document.getElementById('btns');
+        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
+        for (var i = 0, btn; btn = btns[i++];) {
+            UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
+        }
+    }
+
+    function getLocalData () {
+        alert(UE.getEditor('editor').execCommand( "getlocaldata" ));
+    }
+
+    function clearLocalData () {
+        UE.getEditor('editor').execCommand( "clearlocaldata" );
+        alert("已清空草稿箱")
+    }
+</script>
+<script th:inline="javascript">
+// 初始化Web Uploader
+var uploader = WebUploader.create({
+
+    // 选完文件后，是否自动上传。
+    auto: true,
+
+    // swf文件路径
+    swf: [[@{~/js/webuploader/}]] + 'Uploader.swf',
+
+    // 文件接收服务端。
+    server: [[@{~/upload/singleimage}]],
+
+    // 选择文件的按钮。可选。
+    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+    pick: '#filePicker',
+
+    // 只允许选择图片文件。
+    accept: {
+        title: 'Images',
+        extensions: 'gif,jpg,jpeg,bmp,png',
+        mimeTypes: 'image/*'
+    }
+});
+// 当有文件添加进来的时候
+uploader.on( 'fileQueued', function( file ) {
+    var $li = $(
+            '<div id="' + file.id + '" class="file-item thumbnail">' +
+                '<img />' +
+                '<input name="cover" type = "hidden" />'+
+                '<div class="info">' + file.name + '</div>' +
+            '</div>'
+            ),
+        $img = $li.find('img');
+        var $list = $("#fileList");
+    // $list为容器jQuery实例
+    $list.append( $li );
+    // 创建缩略图
+    // 如果为非图片文件，可以不用调用此方法。
+    // thumbnailWidth x thumbnailHeight 为 100 x 100
+    uploader.makeThumb( file, function( error, src ) {
+        if ( error ) {
+            $img.replaceWith('<span>不能预览</span>');
+            return;
+        }
+        $img.attr( 'src', src );
+    }, 100, 100);
+});
+// 文件上传过程中创建进度条实时显示。
+uploader.on( 'uploadProgress', function( file, percentage ) {
+    var $li = $( '#'+file.id ),
+        $percent = $li.find('.progress span');
+
+    // 避免重复创建
+    if ( !$percent.length ) {
+        $percent = $('<p class="progress"><span></span></p>')
+                .appendTo( $li )
+                .find('span');
+    }
+
+    $percent.css( 'width', percentage * 100 + '%' );
+});
+
+// 文件上传成功，给item添加成功class, 用样式标记上传成功。
+uploader.on( 'uploadSuccess', function( file,response ) {
+    console.log(response);
+    var $fileDiv = $( '#'+file.id );
+    $fileDiv.addClass('upload-state-done');
+    var $input = $fileDiv.find("input");
+    $input.val(response.data.path);
+});
+
+// 文件上传失败，显示上传出错。
+uploader.on( 'uploadError', function( file ) {
+    var $li = $( '#'+file.id ),
+        $error = $li.find('div.error');
+    // 避免重复创建
+    if ( !$error.length ) {
+        $error = $('<div class="error"></div>').appendTo( $li );
+    }
+    $error.text('上传失败');
+});
+
+// 完成上传完了，成功或者失败，先删除进度条。
+uploader.on( 'uploadComplete', function( file ) {
+    $( '#'+file.id ).find('.progress').remove();
+});
+</script>
+</body>
+</html>

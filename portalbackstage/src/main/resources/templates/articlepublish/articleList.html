@@ -52,7 +52,8 @@
                     </form>
 					<div class="Mian-cont-btn clearfix">
 						<div class="operateBtn">
-							<a href="wenzhang_xinwen_fabu.html" class="greenbtn publish">新增</a>
+							<a href="wenzhang_xinwen_fabu.html" th:href="'javascript:addArticleByColumnId('+${columnId}+');'"
+							   class="greenbtn publish">新增</a>
 						</div>
 						<!--<div class="searchBar">-->
 							<!--<input type="text" id="" value="" class="form-control srhTxt" placeholder="输入标题关键字搜索" />-->
@@ -87,7 +88,14 @@
 						</div>
 						<!--pages E-->
 					</div>
-				
+                    <script th:inline="javascript">
+                        function addArticleByColumnId(columnId){
+                            $("#commonMask").show();
+                            window.open ([[@{~/article/}]] + columnId + '/new' ,
+                                'newwindow',
+                                'height=600,width=1000,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
+                        }
+                    </script>
 				</div>
 			</div>
 		</div>
@@ -185,7 +193,6 @@ var params = {
 };
 ZXXFILE = $.extend(ZXXFILE, params);
 ZXXFILE.init();
-
 </script>
 </div>
 </body></html>
