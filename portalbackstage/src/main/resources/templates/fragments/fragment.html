@@ -58,7 +58,8 @@
     </div>
 </div>
 <div  th:fragment="foot">
-    <script type="text/javascript" src="../../static/js/jquery.min.js" th:src="@{~/js/jquery.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/jquery-3.3.1.min.js" th:src="@{~/js/jquery-3.3.1.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/jquery.form.min.js" th:src="@{~/js/jquery.form.min.js}"></script>
     <script type="text/javascript" src="js/main.js" th:src="@{~/js/main.js}"></script>
     <script type="text/javascript" src="../../static/js/modernizr.js" th:src="@{~/js/modernizr.js}"></script>
     <!--[if IE]
@@ -81,6 +82,15 @@
 	    })
     </script>
     <script type="text/javascript" th:inline="javascript">
+    		/**
+		 * 隐藏蒙版
+		 */
+		function hideMask(){
+            var $a = $("#columnBar").children(".cur").children("a");
+            $a.click();
+			$("#commonMask").hide();
+		}
+
 	    function MainindexLoadPageByUrl(url){
 	        $.get(url, function(result){
 	            //console.log(result);

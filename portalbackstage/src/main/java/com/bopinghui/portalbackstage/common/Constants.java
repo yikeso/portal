@@ -10,12 +10,16 @@ public interface Constants {
     /**
      * 分页查询页面大小
      */
-    int PAGE_SIZE = 15;
+    int PAGE_SIZE = 5;
 
     /**
      * 文章集合名称
      */
     String ARTICLE_COLLECTION_NAME="article";
+    /**
+     * 文章内容集合名称
+     */
+    String ARTICLE_DETAIL_COLLECTION_NAME="articleDetail";
 
 
 }

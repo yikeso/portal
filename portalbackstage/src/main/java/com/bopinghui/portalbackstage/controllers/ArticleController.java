@@ -2,16 +2,15 @@ package com.bopinghui.portalbackstage.controllers;
 
 import com.bopinghui.po.constants.ColumnConstant;
 import com.bopinghui.po.entity.Article;
+import com.bopinghui.po.entity.ArticleDetail;
 import com.bopinghui.portalbackstage.common.Constants;
 import com.bopinghui.portalbackstage.common.PageResult;
+import com.bopinghui.portalbackstage.common.ServerResponse;
 import com.bopinghui.portalbackstage.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 文章管理控制层
@@ -60,6 +59,12 @@ public class ArticleController {
         model.addAttribute("title","新增文章");
         model.addAttribute("columnId",columnId);
         return "articlepublish/wenzhang_xinwen_fabu";
+    }
+
+    @PostMapping("/add")
+    @ResponseBody
+    public ServerResponse addNewArticle(Article article, ArticleDetail articleDetail){
+        return articleService.addArticle(article,articleDetail);
     }
 
 }

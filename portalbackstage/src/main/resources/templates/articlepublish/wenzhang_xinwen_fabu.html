@@ -14,7 +14,8 @@
     <!--[if lte IE 8]>
     <link href="../../static/css/ie8.css" rel="stylesheet" type="text/css" th:href="@{~/css/ie8.css}"/>
     <![endif]-->
-    <script type="text/javascript" src="../../static/js/jquery.min.js" th:src="@{~/js/jquery.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/jquery-3.3.1.min.js" th:src="@{~/js/jquery-3.3.1.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/jquery.form.min.js" th:src="@{~/js/jquery.form.min.js}"></script>
     <script type="text/javascript" src="../../static/js/main.js" th:src="@{~/js/main.js}"></script>
     <script type="text/javascript" src="../../static/js/modernizr.js" th:src="@{~/js/modernizr.js}"></script>
     <script type="text/javascript" src="../../static/js/jquery.selectui.js" th:src="@{~/js/jquery.selectui.js}"></script>
@@ -40,11 +41,11 @@
 			<div class="publishArt">
 				<h4>发布文章</h4>
 				<div class="pubMain">
-					<form action="" method="post">
+					<form id="articleForm" action="#" th:action="@{~/article/add}" method="post">
                     <input type="hidden" name="columnId" th:value="${columnId}" />
                         <h5 class="pubtitle">文章标题</h5>
                         <div class="pub-txt-bar">
-                            <input type="text" name="title" class="shuruTxt" />
+                            <input type="text" name="title" class="shuruTxt" required="required" />
 						</div>
 						<h5 class="pubtitle">文章关键字</h5>
 						<div class="pub-txt-bar">
@@ -69,7 +70,7 @@
                         <script id="container" name="content" type="text/plain">
                         </script>
 						<div class="pub-btn">
-							<input type="button" id="" value="保存" class="saveBtn" />
+							<input type="submit" onsubmit="saveArticle()" id="" value="保存" class="saveBtn" />
 						</div>
 					</form>
 				</div>
@@ -79,7 +80,7 @@
     </div>
 	<!--content E-->
 	<!--点击修改弹出层-->
-	<div class="layuiBg"></div><!--公共遮罩-->
+	<div class="layuiBg" id="mask"></div><!--公共遮罩-->
 <script type="text/javascript">
 // 添加全局站点信息
 var BASE_URL = '/webuploader';
@@ -204,6 +205,12 @@ var BASE_URL = '/webuploader';
     }
 </script>
 <script th:inline="javascript">
+/**
+ * 一出传入元素的父元素
+ */
+ function removeParentElement(e){
+    $(e).parent().parent().remove();
+ }
 // 初始化Web Uploader
 var uploader = WebUploader.create({
 
@@ -233,7 +240,8 @@ uploader.on( 'fileQueued', function( file ) {
             '<div id="' + file.id + '" class="file-item thumbnail">' +
                 '<img />' +
                 '<input name="cover" type = "hidden" />'+
-                '<div class="info">' + file.name + '</div>' +
+                '<div class="info">' + file.name
+                    + ' <a href="javascript:void(0)" onclick="removeParentElement(this)">删除</a></div>' +
             '</div>'
             ),
         $img = $li.find('img');
@@ -291,5 +299,6 @@ uploader.on( 'uploadComplete', function( file ) {
     $( '#'+file.id ).find('.progress').remove();
 });
 </script>
+    <script src="../../static/js/addArticle.js" th:src="@{~/js/addArticle.js}"></script>
 </body>
 </html>

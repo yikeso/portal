@@ -2,10 +2,6 @@ package com.bopinghui.portalbackstage.repositories;
 
 import com.bopinghui.po.entity.Article;
 import com.bopinghui.portalbackstage.common.Constants;
-import com.mongodb.BasicDBObject;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +11,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -47,8 +41,12 @@ public class ArticleRepository {
         Criteria columnIdCriteria = Criteria.where("columnId").is(columnId);
         query.addCriteria(columnIdCriteria);
         query.addCriteria(Criteria.where("delete").is(delete));
-        Sort sort = new Sort("createDate", "-1");
+        Sort sort = new Sort(Sort.Direction.DESC,"createDate");
         query.with(sort);
+        pageNo = pageNo -1;
+        if(pageNo< 0){
+            pageNo = 0;
+        }
         Pageable pageable = new PageRequest(pageNo,pageSize);
         query.with(pageable);
         return mongoTemplate.find(query,Article.class, Constants.ARTICLE_COLLECTION_NAME);
@@ -65,6 +63,15 @@ public class ArticleRepository {
         Criteria columnIdCriteria = Criteria.where("columnId").is(columnId);
         query.addCriteria(columnIdCriteria);
         query.addCriteria(Criteria.where("delete").is(delete));
-        return mongoTemplate.count(query,Article.class);
+        return mongoTemplate.count(query,Article.class,Constants.ARTICLE_COLLECTION_NAME);
+    }
+
+    /**
+     * 保存文章到集合
+     * id不会自动生成，如果有相同id覆盖已有id的值
+     * @param article
+     */
+    public void saveArticle(Article article){
+        mongoTemplate.save(article,Constants.ARTICLE_COLLECTION_NAME);
     }
 }

@@ -45,7 +45,7 @@
 				</div>
 				
 				<div class="ctab-Mian-cont"  th:fragment="articleList">
-                    <form action="" method="post" id="form1">
+                    <form action="" th:action="@{~/article/list}" method="post" id="form1">
                         <input type="hidden" name="columnId" th:value="${columnId}" />
                         <input type="hidden" name="pageNo" id = "pageNo" th:value="${pageResult.pageNo}" />
                         <input type="hidden" name="pageSize" th:value="${pageResult.pageSize}" />
@@ -63,15 +63,22 @@
 					<div class="Mian-cont-wrap">
 						<div class="defaultTab-T">
 							<table border="0" cellspacing="0" cellpadding="0" class="defaultTable">
-								<tbody><tr><th class="t_1">文章ID</th><th class="t_2">文章标题</th><th class="t_3">发布时间</th><th class="t_4">操作</th></tr>
-							</tbody></table>
+								<tbody>
+								<tr>
+									<th class="t_1">序号</th>
+									<th class="t_2">文章标题</th>
+									<th class="t_3">发布时间</th>
+									<th class="t_4">操作</th>
+								</tr>
+							</tbody>
+							</table>
 						</div>
 						<table border="0" cellspacing="0" cellpadding="0" class="defaultTable defaultTable2">
 							<tbody>
 							<tr th:each="article,stat : ${pageResult.data}">
-								<td class="t_1" th:text="article.id">20150084</td>
-								<td class="t_2"><a href="#" th:text="article.title">平安好医生与平安银行开启全面战略合作</a></td>
-								<td class="t_3" th:text="${#dates.format(article.publishDate, 'yyyy-MM-dd HH:mm:ss')}">2015-12-01</td>
+								<td class="t_1" th:text="${stat.count}" th:attr="data-id = ${article.id}">20150084</td>
+								<td class="t_2"><a href="#" th:text="${article.title}">平安好医生与平安银行开启全面战略合作</a></td>
+								<td class="t_3" th:text="${article.publishDate ==null?'':#dates.format(article.publishDate, 'yyyy-MM-dd HH:mm:ss')}">2015-12-01</td>
 								<td class="t_4"><div class="btn"><a class="Top">置顶</a><a href="#" class="modify">修改</a><a href="#" class="delete">删除</a></div></td>
 							</tr>
 						</tbody></table>
@@ -79,9 +86,12 @@
 						<div class="pageSelect">
 							<span>共 <b th:text="${pageResult.count}">188</b> 条 每页 <b th:text="${pageResult.pageSize}">10 </b>条</span>
 							<div class="pageWrap">
-								<a class="pagePre" th:if="${pageResult.pageNo &gt; 1}"><i class="ico-pre">&nbsp;</i></a>
+								<a class="pagePre" th:if="${pageResult.pageNo &gt; 1}" th:href="'javascript:pageLoadArticleList(' + ${pageResult.pageNo-1} + ');'">
+                                    <i class="ico-pre">&nbsp;</i>
+                                </a>
 								<a href="#" class="pagenumb cur" th:text="${pageResult.pageNo}">1</a>
-								<a href="#" class="pagenext" th:if="${pageResult.pageNo * pageResult.pageSize &lt; pageResult.count}">
+								<a href="#" class="pagenext" th:if="${pageResult.pageNo * pageResult.pageSize &lt; pageResult.count}"
+                                   th:href="'javascript:pageLoadArticleList(' + ${pageResult.pageNo+1} + ');'">
                                     <i class="ico-next">&nbsp;</i>
                                 </a>
 							</div>
@@ -96,6 +106,24 @@
                                 'height=600,width=1000,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
                         }
                     </script>
+                    <script type="text/javascript">
+		                function pageLoadArticleList(pageNo){
+                            $("#pageNo").val(pageNo);
+                            $('#commonMask').show();
+                            var options = {
+                                type:'POST',
+                                dataType:'html',
+                                success : function(data){
+                                    $("#articleList").html(data);
+                                    $('#commonMask').hide();
+                                },
+                                error : function(){
+                                    $('#commonMask').hide();
+                                }
+                            };
+                            $('#form1').ajaxSubmit(options);
+		                }
+	            </script>
 				</div>
 			</div>
 		</div>
@@ -103,96 +131,6 @@
 		
 	</div>
 	<!--content E-->
-	
-	<div class="layuiBg"></div><!--公共遮罩-->
-<script type="text/javascript" src="js/zxxFile.js"></script>
-<script>
-var params = {
-	fileInput: $("#fileImage").get(0),
-	upButton: $("#fileSubmit").get(0),
-	url: $("#uploadForm").attr("action"),
-	filter: function(files) {
-		var arrFiles = [];
-		for (var i = 0, file; file = files[i]; i++) {
-			if (file.type.indexOf("image") == 0) {
-				if (file.size >= 512000) {
-					alert('您这张"'+ file.name +'"图片大小过大，应小于500k');	
-				} else {
-					arrFiles.push(file);	
-				}			
-			} else {
-				alert('文件"' + file.name + '"不是图片。');	
-			}
-		}
-		return arrFiles;
-	},
-	onSelect: function(files) {
-		var html = '', i = 0;
-		$("#preview").html('<div class="upload_loading"></div>');
-		var funAppendImage = function() {
-			file = files[i];
-			if (file) {
-				var reader = new FileReader()
-				reader.onload = function(e) {
-					$('.XgfileImg img').attr('src', e.target.result);
-					$('.sp-photo').addClass('cur');
-					html = html + '<div id="uploadList_'+ i +'" class="upload_append_list"><p><span>' + file.name + '</span>'+ 
-						'<a href="javascript:" class="upload_delete" title="删除" data-index="'+ i +'">删除</a></p>' +
-					'</div>';
-					
-					i++;
-					funAppendImage();
-				}
-				reader.readAsDataURL(file);
-			} else {
-				$("#preview").html(html);
-				if (html) {
-					//删除方法
-					$(".upload_delete").click(function() {
-						ZXXFILE.funDeleteFile(files[parseInt($(this).attr("data-index"))]);
-						$('.sp-photo').removeClass('cur').html('栏目图片');
-						return false;	
-					});
-					//提交按钮显示
-					$("#fileSubmit").show();	
-				} else {
-					//提交按钮隐藏
-					$("#fileSubmit").hide();	
-				}
-			}
-		};
-		funAppendImage();		
-	},
-	onDelete: function(file) {
-		$("#uploadList_" + file.index).fadeOut();
-	},
-	onDragOver: function() {
-		$(this).addClass("upload_drag_hover");
-	},
-	onDragLeave: function() {
-		$(this).removeClass("upload_drag_hover");
-	},
-	onProgress: function(file, loaded, total) {
-		var eleProgress = $("#uploadProgress_" + file.index), percent = (loaded / total * 100).toFixed(2) + '%';
-		eleProgress.show().html(percent);
-	},
-	onSuccess: function(file, response) {
-		$("#uploadInf").append("<p>上传成功，图片地址是：" + response + "</p>");
-	},
-	onFailure: function(file) {
-		$("#uploadInf").append("<p>图片" + file.name + "上传失败！</p>");	
-		$("#uploadImage_" + file.index).css("opacity", 0.2);
-	},
-	onComplete: function() {
-		//提交按钮隐藏
-		$("#fileSubmit").hide();
-		//file控件value置空
-		$("#fileImage").val("");
-		$("#uploadInf").append("<p>当前图片全部上传完毕，可继续添加上传。</p>");
-	}
-};
-ZXXFILE = $.extend(ZXXFILE, params);
-ZXXFILE.init();
-</script>
 </div>
-</body></html>
+</body>
+</html>

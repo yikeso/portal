@@ -1,11 +1,20 @@
 package com.bopinghui.portalbackstage.service;
 
 import com.bopinghui.po.entity.Article;
+import com.bopinghui.po.entity.ArticleDetail;
 import com.bopinghui.portalbackstage.common.PageResult;
+import com.bopinghui.portalbackstage.common.ServerResponse;
+import com.bopinghui.portalbackstage.common.utils.IdUtil;
+import com.bopinghui.portalbackstage.repositories.ArticleDetailRepostory;
 import com.bopinghui.portalbackstage.repositories.ArticleRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
-import javax.annotation.Resource;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -17,8 +26,13 @@ import java.util.List;
 @Service
 public class ArticleService {
 
-    @Resource
+    @Autowired
     ArticleRepository articleRepository;
+
+    @Autowired
+    ArticleDetailRepostory articleDetailRepostory;
+
+    private static final Logger log = LoggerFactory.getLogger(ArticleService.class);
 
     /**
      * 对未删除文章根据栏目id分页查询
@@ -34,4 +48,34 @@ public class ArticleService {
         return pageResult;
     }
 
+    /**
+     * 添加新的文章到集合
+     * @param article
+     * @param articleDetail
+     * @return
+     */
+    public ServerResponse addArticle(Article article, ArticleDetail articleDetail){
+        List<String> covers = article.getCover();
+        if(covers != null) {
+            Iterator<String> it = article.getCover().iterator();
+            String url = null;
+            while (it.hasNext()) {
+                url = it.next();
+                if (StringUtils.isEmpty(url)) {
+                    it.remove();
+                }
+            }
+        }
+        String id = IdUtil.createId();
+        Date now = new Date();
+        article.setId(id);
+        article.setCreateDate(now);
+        log.debug("保存文章：{}",article);
+        articleDetail.setId(id);
+        articleDetail.setCreateDate(now);
+        log.debug("保存文章内容：{}",articleDetail);
+        articleDetailRepostory.saveArticleDetail(articleDetail);
+        articleRepository.saveArticle(article);
+        return ServerResponse.ofSucess();
+    }
 }
