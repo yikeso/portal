@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html class=" js csstransforms3d"  lang="zh-cmn-Hans" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+	<meta charset="utf-8" />
+	<meta name="renderer" content="webkit" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>文章发布</title>
+	<link rel="stylesheet" href="css/base.css" />
+	<link rel="stylesheet" href="css/page.css" />
+	<!--[if lte IE 8]>
+	<link href="css/ie8.css" rel="stylesheet" type="text/css"/>
+	<![endif]-->
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="js/modernizr.js"></script>
+	<!--[if IE]>
+	<script src="http://libs.useso.com/js/html5shiv/3.7/html5shiv.min.js"></script>
+	<![endif]-->
+</head>
+
+<body th:fragment="articlepublish">
+<div  style="background: #f6f5fa;">
+
+	<!--content S-->
+	<div class="super-content RightMain" id="RightMain">
+		
+		<!--header-->
+		<div class="superCtab">
+			<div class="ctab-title clearfix">
+                <h3>文章发布</h3>
+                <!--<a href="javascript:;" class="sp-column"><i class="ico-mng"></i>栏目管理</a>-->
+            </div>
+			
+			<div class="ctab-Main">
+				<div class="ctab-Main-title">
+					<ul class="clearfix">
+						<!--<li class="cur"><a href="wenzhang_xinwen.html">新闻动态</a></li>-->
+						<li th:each="column,stat : ${columnList}">
+                            <a th:href="javascript:loadArticleListByColumnId(${column.columnId});"
+                                th:text="${column.columnName}">品尚生活</a>
+                        </li>
+					</ul>
+				</div>
+				
+				<div class="ctab-Mian-cont"  th:fragment="articleList">
+                    <form action="" th:action="@{~/article/list}" method="post" id="form1">
+                        <input type="hidden" name="columnId" th:value="${columnId}" />
+                        <input type="hidden" name="pageNo" id = "pageNo" th:value="${pageResult.pageNo}" />
+                        <input type="hidden" name="pageSize" th:value="${pageResult.pageSize}" />
+                    </form>
+					<div class="Mian-cont-btn clearfix">
+						<div class="operateBtn">
+							<a href="wenzhang_xinwen_fabu.html" th:href="'javascript:addArticleByColumnId('+${columnId}+');'"
+							   class="greenbtn publish">新增</a>
+						</div>
+						<!--<div class="searchBar">-->
+							<!--<input type="text" id="" value="" class="form-control srhTxt" placeholder="输入标题关键字搜索" />-->
+							<!--<input type="button" class="srhBtn" value="" />-->
+						<!--</div>-->
+					</div>
+					<div class="Mian-cont-wrap">
+						<div class="defaultTab-T">
+							<table border="0" cellspacing="0" cellpadding="0" class="defaultTable">
+								<tbody>
+								<tr>
+									<th class="t_1">序号</th>
+									<th class="t_2">文章标题</th>
+									<th class="t_3">发布时间</th>
+									<th class="t_4">操作</th>
+								</tr>
+							</tbody>
+							</table>
+						</div>
+						<table border="0" cellspacing="0" cellpadding="0" class="defaultTable defaultTable2">
+							<tbody>
+							<tr th:each="article,stat : ${pageResult.data}">
+								<td class="t_1" th:text="${stat.count}" th:attr="data-id = ${article.id}">20150084</td>
+								<td class="t_2"><a href="#" th:text="${article.title}">平安好医生与平安银行开启全面战略合作</a></td>
+								<td class="t_3" th:text="${article.publishDate ==null?'':#dates.format(article.publishDate, 'yyyy-MM-dd HH:mm:ss')}">2015-12-01</td>
+								<td class="t_4">
+                                    <div class="btn">
+                                        <a class="Top" th:if="${article.publish}"  href="javascript:void(0)">已发布</a>
+                                        <a class="Top" th:unless="${article.publish}" th:href="'javascript:publishArticle(\'' +${article.id} + '\');'">发布</a>
+                                        <a href="#" class="modify" th:href="'javascript:editArticleById(\'' +${article.id} + '\');'">修改</a>
+                                        <a href="#" class="delete" th:href="'javascript:deleteArticle(\'' +${article.id} + '\');'">删除</a>
+                                    </div>
+                                </td>
+							</tr>
+						</tbody></table>
+						<!--pages S-->
+						<div class="pageSelect">
+							<span>共 <b th:text="${pageResult.count}">188</b> 条 每页 <b th:text="${pageResult.pageSize}">10 </b>条</span>
+							<div class="pageWrap">
+								<a class="pagePre" th:if="${pageResult.pageNo &gt; 1}" th:href="'javascript:pageLoadArticleList(' + ${pageResult.pageNo-1} + ');'">
+                                    <i class="ico-pre">&nbsp;</i>
+                                </a>
+								<a href="#" class="pagenumb cur" th:text="${pageResult.pageNo}">1</a>
+								<a href="#" class="pagenext" th:if="${pageResult.pageNo * pageResult.pageSize &lt; pageResult.count}"
+                                   th:href="'javascript:pageLoadArticleList(' + ${pageResult.pageNo+1} + ');'">
+                                    <i class="ico-next">&nbsp;</i>
+                                </a>
+							</div>
+						</div>
+						<!--pages E-->
+					</div>
+                    <script th:inline="javascript">
+                        function addArticleByColumnId(columnId){
+                            $("#commonMask").show();
+                            window.open ([[@{~/article/}]] + columnId + '/new' ,
+                                'newwindow',
+                                'height=600,width=1000,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
+                        }
+                    </script>
+                    <script type="text/javascript" th:inline="javascript">
+		                function pageLoadArticleList(pageNo){
+                            $("#pageNo").val(pageNo);
+                            $('#commonMask').show();
+                            var options = {
+                                type:'POST',
+                                dataType:'html',
+                                success : function(data){
+                                    $("#articleList").html(data);
+                                    $('#commonMask').hide();
+                                },
+                                error : function(){
+                                    $('#commonMask').hide();
+                                }
+                            };
+                            $('#form1').ajaxSubmit(options);
+		                }
+
+		                //删除文章
+		                function deleteArticle(articleId){
+		                     $('#commonMask').show();
+		                     $.ajax({
+                                 url: [[@{~/article/}]] + articleId,
+                                type: 'DELETE',
+                                success: function(result) {
+                                    if(result.statu == 200){
+                                        pageLoadArticleList([[${pageResult.pageNo}]]);
+                                    }
+                                    $('#commonMask').hide();
+                                },
+                                error:function(){
+                                    $('#commonMask').hide();
+                                }
+                            });
+		                }
+
+		                //删除文章
+		                function publishArticle(articleId){
+		                     $('#commonMask').show();
+		                     $.ajax({
+                                 url: [[@{~/article/publish/}]] + articleId,
+                                type: 'post',
+                                success: function(result) {
+                                    if(result.statu == 200){
+                                        pageLoadArticleList([[${pageResult.pageNo}]]);
+                                    }
+                                    $('#commonMask').hide();
+                                },
+                                error:function(){
+                                    $('#commonMask').hide();
+                                }
+                            });
+		                }
+		                //编辑文章
+                        function editArticleById(id){
+                            $("#commonMask").show();
+                            window.open ([[@{~/article/}]] + id ,
+                                'editwindow',
+                                'height=600,width=1000,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
+                        }
+	            </script>
+				</div>
+			</div>
+		</div>
+		<!--main-->
+		
+	</div>
+	<!--content E-->
+</div>
+</body>
+</html>

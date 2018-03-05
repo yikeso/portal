@@ -1,5 +1,7 @@
 package com.bopinghui.po.entity;
 
+import org.springframework.data.annotation.Id;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -15,11 +17,16 @@ public class Article {
     /**
      * id
      */
+    @Id
     String id;
     /**
      * 文章标题
      */
     String title;
+    /**
+     * 封面
+     */
+    List<String> cover;
     /**
      * 作者
      */
@@ -27,11 +34,12 @@ public class Article {
     /**
      * 关键词
      */
-    List<String> keywords;
+    String keywords;
+
     /**
      * 栏目id
      */
-    int columnId;
+    Integer columnId;
     /**
      * 栏目名称
      */
@@ -39,11 +47,11 @@ public class Article {
     /**
      * 是否删除
      */
-    boolean delete;
+    Boolean delete;
     /**
      * 是否发布
      */
-    boolean publish;
+    Boolean publish;
     /**
      * 发布日期
      */
@@ -73,6 +81,14 @@ public class Article {
         this.title = title;
     }
 
+    public List<String> getCover() {
+        return cover;
+    }
+
+    public void setCover(List<String> cover) {
+        this.cover = cover;
+    }
+
     public String getAuthor() {
         return author;
     }
@@ -81,19 +97,19 @@ public class Article {
         this.author = author;
     }
 
-    public List<String> getKeywords() {
+    public String getKeywords() {
         return keywords;
     }
 
-    public void setKeywords(List<String> keywords) {
+    public void setKeywords(String keywords) {
         this.keywords = keywords;
     }
 
-    public int getColumnId() {
+    public Integer getColumnId() {
         return columnId;
     }
 
-    public void setColumnId(int columnId) {
+    public void setColumnId(Integer columnId) {
         this.columnId = columnId;
     }
 
@@ -105,27 +121,27 @@ public class Article {
         this.columnName = columnName;
     }
 
-    public boolean isDelete() {
+    public Boolean isDelete() {
         return delete;
     }
 
-    public boolean getDelete() {
+    public Boolean getDelete() {
         return delete;
     }
 
-    public void setDelete(boolean delete) {
+    public void setDelete(Boolean delete) {
         this.delete = delete;
     }
 
-    public boolean isPublish() {
+    public Boolean isPublish() {
         return publish;
     }
 
-    public boolean getPublish() {
+    public Boolean getPublish() {
         return publish;
     }
 
-    public void setPublish(boolean publish) {
+    public void setPublish(Boolean publish) {
         this.publish = publish;
     }
 
@@ -172,8 +188,9 @@ public class Article {
         return "Article{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
+                ", cover='" + cover + '\'' +
                 ", author='" + author + '\'' +
-                ", keywords=" + keywords +
+                ", keywords='" + keywords + '\'' +
                 ", columnId=" + columnId +
                 ", columnName='" + columnName + '\'' +
                 ", delete=" + delete +
