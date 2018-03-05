@@ -35,10 +35,11 @@ public class Article {
      * 关键词
      */
     String keywords;
+
     /**
      * 栏目id
      */
-    int columnId;
+    Integer columnId;
     /**
      * 栏目名称
      */
@@ -46,11 +47,11 @@ public class Article {
     /**
      * 是否删除
      */
-    boolean delete;
+    Boolean delete;
     /**
      * 是否发布
      */
-    boolean publish;
+    Boolean publish;
     /**
      * 发布日期
      */
@@ -104,11 +105,11 @@ public class Article {
         this.keywords = keywords;
     }
 
-    public int getColumnId() {
+    public Integer getColumnId() {
         return columnId;
     }
 
-    public void setColumnId(int columnId) {
+    public void setColumnId(Integer columnId) {
         this.columnId = columnId;
     }
 
@@ -120,27 +121,27 @@ public class Article {
         this.columnName = columnName;
     }
 
-    public boolean isDelete() {
+    public Boolean isDelete() {
         return delete;
     }
 
-    public boolean getDelete() {
+    public Boolean getDelete() {
         return delete;
     }
 
-    public void setDelete(boolean delete) {
+    public void setDelete(Boolean delete) {
         this.delete = delete;
     }
 
-    public boolean isPublish() {
+    public Boolean isPublish() {
         return publish;
     }
 
-    public boolean getPublish() {
+    public Boolean getPublish() {
         return publish;
     }
 
-    public void setPublish(boolean publish) {
+    public void setPublish(Boolean publish) {
         this.publish = publish;
     }
 

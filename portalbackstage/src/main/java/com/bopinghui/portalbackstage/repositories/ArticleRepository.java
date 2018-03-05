@@ -2,6 +2,9 @@ package com.bopinghui.portalbackstage.repositories;
 
 import com.bopinghui.po.entity.Article;
 import com.bopinghui.portalbackstage.common.Constants;
+import com.bopinghui.portalbackstage.common.utils.MongoAtempleUtil;
+import com.mongodb.DBDecoder;
+import com.mongodb.DBObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -9,8 +12,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.mongodb.util.DBObjectUtils;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -72,6 +78,50 @@ public class ArticleRepository {
      * @param article
      */
     public void saveArticle(Article article){
+        article.setUpdateDate(new Date());
         mongoTemplate.save(article,Constants.ARTICLE_COLLECTION_NAME);
+    }
+
+    /**
+     * 根据id更新文章
+     * @param article
+     * @throws IllegalAccessException
+     */
+    public void updateById(Article article) throws IllegalAccessException {
+        article.setUpdateDate(new Date());
+        Query query = new Query(Criteria.where("id").is(article.getId()));
+        Update update = MongoAtempleUtil.entity2UpdateIgnoreNull(article);
+        mongoTemplate.updateMulti(query,update,Article.class,Constants.ARTICLE_COLLECTION_NAME);
+    }
+
+    /**
+     * 根据id删除文章
+     * @param articleId
+     */
+    public void deleteById(String articleId) {
+        Query query = new Query(Criteria.where("id").is(articleId));
+        mongoTemplate.findAllAndRemove(query,Article.class,Constants.ARTICLE_COLLECTION_NAME);
+    }
+
+    /**
+     * 根据Id发布文章
+     * @param articleId
+     */
+    public void publishArticle(String articleId) {
+        Query query = new Query(Criteria.where("id").is(articleId));
+        Update update = new Update();
+        update.set("publish",true);
+        update.set("publishDate",new Date());
+        update.set("updateDate",new Date());
+        mongoTemplate.updateMulti(query,update,Article.class,Constants.ARTICLE_COLLECTION_NAME);
+    }
+
+    /**
+     * 根据id查找文章
+     * @param articleId
+     * @return
+     */
+    public Article findArticleById(String articleId) {
+        return mongoTemplate.findById(articleId,Article.class,Constants.ARTICLE_COLLECTION_NAME);
     }
 }

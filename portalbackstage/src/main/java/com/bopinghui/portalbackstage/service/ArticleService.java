@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -66,6 +68,8 @@ public class ArticleService {
                 }
             }
         }
+        article.setDelete(false);
+        article.setPublish(false);
         String id = IdUtil.createId();
         Date now = new Date();
         article.setId(id);
@@ -78,4 +82,25 @@ public class ArticleService {
         articleRepository.saveArticle(article);
         return ServerResponse.ofSucess();
     }
+
+    /**
+     * 根据文章id删除文章
+     * @param articleId
+     * @return
+     */
+    public ServerResponse deleArticleById(String articleId) {
+        articleRepository.deleteById(articleId);
+        return ServerResponse.ofSucess();
+    }
+
+    /**
+     * 发布文章
+     * @param articleId
+     * @return
+     */
+    public ServerResponse publishArticle(String articleId) {
+        articleRepository.publishArticle(articleId);
+        return ServerResponse.ofSucess();
+    }
+
 }

@@ -79,7 +79,14 @@
 								<td class="t_1" th:text="${stat.count}" th:attr="data-id = ${article.id}">20150084</td>
 								<td class="t_2"><a href="#" th:text="${article.title}">平安好医生与平安银行开启全面战略合作</a></td>
 								<td class="t_3" th:text="${article.publishDate ==null?'':#dates.format(article.publishDate, 'yyyy-MM-dd HH:mm:ss')}">2015-12-01</td>
-								<td class="t_4"><div class="btn"><a class="Top">置顶</a><a href="#" class="modify">修改</a><a href="#" class="delete">删除</a></div></td>
+								<td class="t_4">
+                                    <div class="btn">
+                                        <a class="Top" th:if="${article.publish}"  href="javascript:void(0)">已发布</a>
+                                        <a class="Top" th:unless="${article.publish}" th:href="'javascript:publishArticle(\'' +${article.id} + '\');'">发布</a>
+                                        <a href="#" class="modify" th:href="'javascript:editArticleById(\'' +${article.id} + '\');'">修改</a>
+                                        <a href="#" class="delete" th:href="'javascript:deleteArticle(\'' +${article.id} + '\');'">删除</a>
+                                    </div>
+                                </td>
 							</tr>
 						</tbody></table>
 						<!--pages S-->
@@ -106,7 +113,7 @@
                                 'height=600,width=1000,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
                         }
                     </script>
-                    <script type="text/javascript">
+                    <script type="text/javascript" th:inline="javascript">
 		                function pageLoadArticleList(pageNo){
                             $("#pageNo").val(pageNo);
                             $('#commonMask').show();
@@ -123,6 +130,49 @@
                             };
                             $('#form1').ajaxSubmit(options);
 		                }
+
+		                //删除文章
+		                function deleteArticle(articleId){
+		                     $('#commonMask').show();
+		                     $.ajax({
+                                 url: [[@{~/article/}]] + articleId,
+                                type: 'DELETE',
+                                success: function(result) {
+                                    if(result.statu == 200){
+                                        pageLoadArticleList([[${pageResult.pageNo}]]);
+                                    }
+                                    $('#commonMask').hide();
+                                },
+                                error:function(){
+                                    $('#commonMask').hide();
+                                }
+                            });
+		                }
+
+		                //删除文章
+		                function publishArticle(articleId){
+		                     $('#commonMask').show();
+		                     $.ajax({
+                                 url: [[@{~/article/publish/}]] + articleId,
+                                type: 'post',
+                                success: function(result) {
+                                    if(result.statu == 200){
+                                        pageLoadArticleList([[${pageResult.pageNo}]]);
+                                    }
+                                    $('#commonMask').hide();
+                                },
+                                error:function(){
+                                    $('#commonMask').hide();
+                                }
+                            });
+		                }
+		                //编辑文章
+                        function editArticleById(id){
+                            $("#commonMask").show();
+                            window.open ([[@{~/article/}]] + id ,
+                                'editwindow',
+                                'height=600,width=1000,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
+                        }
 	            </script>
 				</div>
 			</div>

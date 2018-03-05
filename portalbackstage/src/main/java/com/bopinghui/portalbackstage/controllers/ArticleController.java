@@ -6,6 +6,8 @@ import com.bopinghui.po.entity.ArticleDetail;
 import com.bopinghui.portalbackstage.common.Constants;
 import com.bopinghui.portalbackstage.common.PageResult;
 import com.bopinghui.portalbackstage.common.ServerResponse;
+import com.bopinghui.portalbackstage.repositories.ArticleDetailRepostory;
+import com.bopinghui.portalbackstage.repositories.ArticleRepository;
 import com.bopinghui.portalbackstage.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,12 @@ public class ArticleController {
 
     @Autowired
     ArticleService articleService;
+
+    @Autowired
+    ArticleRepository articleRepository;
+
+    @Autowired
+    ArticleDetailRepostory articleDetailRepostory;
 
     @GetMapping("/column")
     public String articleColumn(Model model){
@@ -67,4 +75,53 @@ public class ArticleController {
         return articleService.addArticle(article,articleDetail);
     }
 
+    /**
+     * 删除文章
+     * @param articleId
+     * @return
+     */
+    @DeleteMapping("/{articleId}")
+    @ResponseBody
+    public ServerResponse deleteArticle(@PathVariable("articleId") String articleId){
+        return articleService.deleArticleById(articleId);
+    }
+
+    /**
+     * 删除文章
+     * @param articleId
+     * @return
+     */
+    @PostMapping("/publish/{articleId}")
+    @ResponseBody
+    public ServerResponse publishArticle(@PathVariable("articleId") String articleId){
+        return articleService.publishArticle(articleId);
+    }
+
+    /**
+     * 修改文章
+     * @param articleId
+     * @return
+     */
+    @GetMapping("/{articleId}")
+    public String editArticle(@PathVariable("articleId") String articleId,Model model){
+        Article article = articleRepository.findArticleById(articleId);
+        ArticleDetail articleDetail = articleDetailRepostory.findArticleDetailById(articleId);
+        model.addAttribute("article",article);
+        model.addAttribute("articleDetail",articleDetail);
+        return "articlepublish/wenzhang_xinwen_xiugai";
+    }
+
+    /**
+     * 保存文章到集合
+     * @param article
+     * @param articleDetail
+     * @return
+     */
+    @PostMapping("/save")
+    @ResponseBody
+    public ServerResponse saveArticle(Article article, ArticleDetail articleDetail) throws IllegalAccessException {
+        articleRepository.updateById(article);
+        articleDetailRepostory.updateById(articleDetail);
+        return ServerResponse.ofSucess();
+    }
 }
