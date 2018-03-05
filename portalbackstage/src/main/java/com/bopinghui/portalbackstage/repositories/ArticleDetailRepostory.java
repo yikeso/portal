@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
@@ -29,7 +30,10 @@ public class ArticleDetailRepostory {
      * id不会自动生成，如果有相同id覆盖已有id的值
      * @param articleDetail
      */
-    public void saveArticleDetail(ArticleDetail articleDetail){
+    public void saveArticleDetail(ArticleDetail articleDetail) throws IllegalAccessException {
+        if(!StringUtils.isEmpty(articleDetail.getId())){
+            updateById(articleDetail);
+        }
         articleDetail.setUpdateDate(new Date());
         mongoTemplate.save(articleDetail, Constants.ARTICLE_DETAIL_COLLECTION_NAME);
     }

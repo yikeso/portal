@@ -56,7 +56,7 @@ public class ArticleService {
      * @param articleDetail
      * @return
      */
-    public ServerResponse addArticle(Article article, ArticleDetail articleDetail){
+    public ServerResponse addArticle(Article article, ArticleDetail articleDetail) throws IllegalAccessException {
         List<String> covers = article.getCover();
         if(covers != null) {
             Iterator<String> it = article.getCover().iterator();
@@ -68,8 +68,6 @@ public class ArticleService {
                 }
             }
         }
-        article.setDelete(false);
-        article.setPublish(false);
         String id = IdUtil.createId();
         Date now = new Date();
         article.setId(id);

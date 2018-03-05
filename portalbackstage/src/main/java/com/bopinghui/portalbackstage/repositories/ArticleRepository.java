@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.mongodb.util.DBObjectUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -77,7 +78,17 @@ public class ArticleRepository {
      * id不会自动生成，如果有相同id覆盖已有id的值
      * @param article
      */
-    public void saveArticle(Article article){
+    public void saveArticle(Article article) throws IllegalAccessException {
+        if(article.getDelete() == null){
+            article.setDelete(false);
+        }
+        if(article.getPublish() == null){
+            article.setPublish(false);
+        }
+        if(!StringUtils.isEmpty(article.getId())){
+            updateById(article);
+            return;
+        }
         article.setUpdateDate(new Date());
         mongoTemplate.save(article,Constants.ARTICLE_COLLECTION_NAME);
     }

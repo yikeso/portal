@@ -71,7 +71,7 @@ public class ArticleController {
 
     @PostMapping("/add")
     @ResponseBody
-    public ServerResponse addNewArticle(Article article, ArticleDetail articleDetail){
+    public ServerResponse addNewArticle(Article article, ArticleDetail articleDetail) throws IllegalAccessException {
         return articleService.addArticle(article,articleDetail);
     }
 
